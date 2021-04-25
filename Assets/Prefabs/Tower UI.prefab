@@ -89,6 +89,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerIcon: {fileID: 1382947605515344723}
+  towerPrefab: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
+    type: 3}
 --- !u!1 &4019871246683845599
 GameObject:
   m_ObjectHideFlags: 0

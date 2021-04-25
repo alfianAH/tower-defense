@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Tower[] towerPrefabs;
 
+    private List<Tower> spawnedTowers = new List<Tower>();
+
     private void Start()
     {
         InstantiateAllTowerUi();
@@ -42,5 +45,14 @@ public class LevelManager : MonoBehaviour
             newTowerUi.SetTowerPrefab(tower);
             newTowerUi.transform.name = tower.name;
         }
+    }
+    
+    /// <summary>
+    /// Set tower to spawned towers
+    /// </summary>
+    /// <param name="tower"></param>
+    public void RegisterSpawnedTowers(Tower tower)
+    {
+        spawnedTowers.Add(tower);
     }
 }
