@@ -2058,3 +2058,19 @@ MonoBehaviour:
   - {fileID: 2225516035141617857, guid: f88740a65f85eec459bbc713282aa48a, type: 3}
   - {fileID: 8953661892059961893, guid: 87bafec844634714c9affe4c92c42cb3, type: 3}
   - {fileID: 6462661273956869986, guid: 9ea4f3d6869a704439d156a36146c917, type: 3}
+  enemyPrefabs:
+  - {fileID: 1499806253286077396, guid: 191c3c43180754f4f8c262205bd385e4, type: 3}
+  - {fileID: 8171748344231416743, guid: 778ff373e6db05141beaedadb93bfbd9, type: 3}
+  enemyPaths:
+  - {fileID: 1844967519}
+  - {fileID: 1921614683}
+  - {fileID: 1254625613}
+  - {fileID: 60968667}
+  - {fileID: 1622516342}
+  - {fileID: 523312991}
+  - {fileID: 1414418934}
+  - {fileID: 117122614}
+  - {fileID: 1516782882}
+  - {fileID: 1877558092}
+  - {fileID: 439992175}
+  spawnDelay: 5
