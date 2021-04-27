@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
@@ -31,7 +30,7 @@ public class Bullet : MonoBehaviour
 
             Vector3 direction = targetPosition - bulletPosition;
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = quaternion.Euler(new Vector3(0f, 0f, targetAngle-90f));
+            transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, targetAngle-90f));
         }
     }
 

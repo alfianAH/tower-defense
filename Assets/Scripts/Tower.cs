@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
@@ -136,7 +135,7 @@ public class Tower : MonoBehaviour
 
         Vector3 direction = targetEnemy.transform.position - transform.position;
         float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        targetRotation = quaternion.Euler(new Vector3(0f, 0f, targetAngle - 90f));
+        targetRotation = Quaternion.Euler(new Vector3(0f, 0f, targetAngle - 90f));
         
         towerHead.transform.rotation = Quaternion.RotateTowards(
             towerHead.transform.rotation,
