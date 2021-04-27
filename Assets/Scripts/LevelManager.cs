@@ -31,6 +31,7 @@ public class LevelManager : MonoBehaviour
 
     private List<Tower> spawnedTowers = new List<Tower>();
     private List<Enemy> spawnedEnemies = new List<Enemy>();
+    private List<Bullet> spawnedBullets = new List<Bullet>();
 
     private float runningSpawnDelay;
     
@@ -51,7 +52,16 @@ public class LevelManager : MonoBehaviour
             SpawnEnemy();
             runningSpawnDelay = spawnDelay;
         }
-
+        
+        // Tower are looking for enemy...
+        foreach (Tower tower in spawnedTowers)
+        {
+            tower.CheckNearestEnemy(spawnedEnemies);
+            tower.SeekTarget();
+            tower.ShootTarget();
+        }
+        
+        // Enemy's movement
         foreach (Enemy enemy in spawnedEnemies)
         {
             if(!enemy.gameObject.activeSelf) continue;
@@ -108,7 +118,7 @@ public class LevelManager : MonoBehaviour
     /// <summary>
     /// Spawn the enemy
     /// </summary>
-    public void SpawnEnemy()
+    private void SpawnEnemy()
     {
         // Choose random enemy
         int randomIndex = Random.Range(0, enemyPrefabs.Length);
@@ -138,6 +148,55 @@ public class LevelManager : MonoBehaviour
         newEnemy.SetTargetPosition(enemyPaths[1].position);
         newEnemy.SetCurrentPathIndex(1);
         newEnemy.gameObject.SetActive(true);
+    }
+    
+    /// <summary>
+    /// Find bullet from the pool
+    /// </summary>
+    /// <param name="bulletPrefab">Bullet prefab</param>
+    /// <returns></returns>
+    public Bullet GetBulletFromPool(Bullet bulletPrefab)
+    {
+        // Find unused bullet in hierarchy
+        GameObject newBulletObj = spawnedBullets.Find(
+            b => !b.gameObject.activeSelf && b.name.Contains(bulletPrefab.name)
+        )?.gameObject;
+        
+        // Make a new one if can't find it
+        if (newBulletObj == null)
+        {
+            newBulletObj = Instantiate(bulletPrefab.gameObject);
+        }
+
+        Bullet newBullet = newBulletObj.GetComponent<Bullet>();
+        
+        // Add new bullet to the list if it isn't in the list
+        if (!spawnedBullets.Contains(newBullet))
+        {
+            spawnedBullets.Add(newBullet);
+        }
+
+        return newBullet;
+    }
+    
+    /// <summary>
+    /// Exploosioonn!!!
+    /// </summary>
+    /// <param name="point">Bullet's position</param>
+    /// <param name="radius">Bullet's splash radius</param>
+    /// <param name="damage">Bullet's damage</param>
+    public void ExplodeAt(Vector2 point, float radius, int damage)
+    {
+        foreach (Enemy enemy in spawnedEnemies)
+        {
+            if (enemy.gameObject.activeSelf)
+            {
+                if (Vector2.Distance(enemy.transform.position, point) <= radius)
+                {
+                    enemy.ReduceEnemyHealth(damage);
+                }
+            }
+        }
     }
 
     private void OnDrawGizmos()

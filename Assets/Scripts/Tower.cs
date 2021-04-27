@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
@@ -11,9 +13,23 @@ public class Tower : MonoBehaviour
     [SerializeField] private float shootDistance = 1f,
         shootDelay = 5f,
         bulletSpeed = 1f,
-        bulletSplashRadius = 0f;
+        bulletSplashRadius;
+    [SerializeField] private Bullet bulletPrefab;
+
+    private float runningShootDelay;
+    private Enemy targetEnemy;
+    private Quaternion targetRotation;
     
     public Vector2? PlacePosition { get; private set; }
+    
+    /// <summary>
+    /// Get tower head's sprite
+    /// </summary>
+    /// <returns>Tower head's sprite</returns>
+    public Sprite GetTowerHeadIcon()
+    {
+        return towerHead.sprite;
+    }
     
     /// <summary>
     /// Set place position
@@ -46,11 +62,85 @@ public class Tower : MonoBehaviour
     }
     
     /// <summary>
-    /// Get tower head's sprite
+    /// Check nearest enemy
     /// </summary>
-    /// <returns>Tower head's sprite</returns>
-    public Sprite GetTowerHeadIcon()
+    /// <param name="enemies"></param>
+    public void CheckNearestEnemy(List<Enemy> enemies)
     {
-        return towerHead.sprite;
+        // If there is target, ...
+        if (targetEnemy != null)
+        {
+            // If target is not active or target is out of shooting distance/range, ...
+            if (!targetEnemy.gameObject.activeSelf ||
+                Vector3.Distance(transform.position, targetEnemy.transform.position) > shootDistance)
+            {
+                // Set targetEnemy to null
+                targetEnemy = null;
+            }
+            else return;
+        }
+
+        float nearestDistance = Mathf.Infinity;
+        Enemy nearestEnemy = null;
+        
+        // Check nearest distance and enemy in enemies
+        foreach (Enemy enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            
+            if(distance > shootDistance) continue;
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+
+        targetEnemy = nearestEnemy;
+    }
+    
+    /// <summary>
+    /// Shoot target enemy
+    /// </summary>
+    public void ShootTarget()
+    {
+        if(targetEnemy == null) return;
+
+        runningShootDelay -= Time.unscaledDeltaTime;
+        
+        if (runningShootDelay <= 0f)
+        {
+            bool headHasAimed = Mathf.Abs(
+                towerHead.transform.rotation.eulerAngles.z - targetRotation.eulerAngles.z) < 10f;
+            
+            if(!headHasAimed) return;
+            
+            // Prepare the bullet
+            Bullet bullet = LevelManager.Instance.GetBulletFromPool(bulletPrefab);
+            bullet.transform.position = transform.position;
+            bullet.SetProperties(shootPower, bulletSpeed, bulletSplashRadius);
+            bullet.SetTargetEnemy(targetEnemy);
+            bullet.gameObject.SetActive(true);
+
+            runningShootDelay = shootDelay;
+        }
+    }
+    
+    /// <summary>
+    /// Rotate tower head to the target enemy
+    /// </summary>
+    public void SeekTarget()
+    {
+        if(targetEnemy == null) return;
+
+        Vector3 direction = targetEnemy.transform.position - transform.position;
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        targetRotation = quaternion.Euler(new Vector3(0f, 0f, targetAngle - 90f));
+        
+        towerHead.transform.rotation = Quaternion.RotateTowards(
+            towerHead.transform.rotation,
+            targetRotation,
+            Time.deltaTime * 180f);
     }
 }

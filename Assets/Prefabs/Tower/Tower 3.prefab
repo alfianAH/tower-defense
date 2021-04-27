@@ -7,6 +7,27 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
+        type: 3}
+      propertyPath: bulletSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
+        type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 3636614204146606861, guid: e9012943f95968a4a9959405cbb5a818,
+        type: 3}
+    - target: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
+        type: 3}
+      propertyPath: shootDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
+        type: 3}
+      propertyPath: bulletSplashRadius
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2415939057259374536, guid: 1bd2d60627c62e84da41185ce2316c67,
         type: 3}
       propertyPath: m_Sprite

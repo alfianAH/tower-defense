@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -64,5 +63,18 @@ public class Enemy : MonoBehaviour
     public void SetCurrentPathIndex(int currentIndex)
     {
         CurrentPathIndex = currentIndex;
+    }
+    
+    /// <summary>
+    /// Reduce enemy's health
+    /// </summary>
+    /// <param name="damage">Damage to enemy's health</param>
+    public void ReduceEnemyHealth(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
