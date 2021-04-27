@@ -4,7 +4,7 @@ public class TowerPlacement : MonoBehaviour
 {
     private Tower placedTower;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         // If the placement is already reserved, then return
         if (placedTower != null) return;
