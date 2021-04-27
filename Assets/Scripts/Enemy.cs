@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     public int CurrentPathIndex { get; private set; }
 
     private int currentHealth;
+    private const string EnemyHitAudio = "hit-enemy",
+        EnemyDieAudio = "enemy-die";
 
     private void OnEnable()
     {
@@ -72,9 +74,18 @@ public class Enemy : MonoBehaviour
     public void ReduceEnemyHealth(int damage)
     {
         currentHealth -= damage;
+        AudioPlayer.Instance.PlaySFX(EnemyHitAudio);
+        
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             gameObject.SetActive(false);
+            AudioPlayer.Instance.PlaySFX(EnemyDieAudio);
         }
+
+        float healthPercentage = (float) currentHealth / maxHealth;
+        Vector2 healthBarSize = healthBar.size;
+        
+        healthFill.size = new Vector2(healthPercentage * healthBarSize.x, healthBarSize.y);
     }
 }
