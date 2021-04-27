@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
@@ -20,28 +22,46 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    [Header("Level Properties")]
+    [SerializeField] private int maxLives = 3;
+    [SerializeField] private int totalEnemies = 15;
+
+    [Header("User Interface")] 
+    [SerializeField] private GameObject panel;
+    [SerializeField] private Text statusInfo,
+        livesInfo,
+        totalEnemiesInfo;
+
+    [Header("Tower Properties")]
     [SerializeField] private Transform towerUiParent;
     [SerializeField] private GameObject towerUiPrefab;
-
     [SerializeField] private Tower[] towerPrefabs;
+    
+    [Header("Enemy Properties")]
     [SerializeField] private Enemy[] enemyPrefabs;
-
     [SerializeField] private Transform[] enemyPaths;
     [SerializeField] private float spawnDelay = 5f;
 
-    private List<Tower> spawnedTowers = new List<Tower>();
-    private List<Enemy> spawnedEnemies = new List<Enemy>();
-    private List<Bullet> spawnedBullets = new List<Bullet>();
+    private readonly List<Tower> spawnedTowers = new List<Tower>();
+    private readonly List<Enemy> spawnedEnemies = new List<Enemy>();
+    private readonly List<Bullet> spawnedBullets = new List<Bullet>();
 
     private float runningSpawnDelay;
+    private int enemyCounter, 
+        currentLives;
+    public bool IsOver { get; private set; }
     
     private void Start()
     {
+        SetCurrentLives(maxLives);
+        SetTotalEnemies(totalEnemies);
         InstantiateAllTowerUi();
     }
 
     private void Update()
     {
+        if (IsOver) return;
+        
         // Counter is to spawn the enemy in certain delay
         // Time.unscaledDeltaTime is independent delta time, unaffected by anything but itself,
         // so it can be used as a timer
@@ -80,6 +100,7 @@ public class LevelManager : MonoBehaviour
                 else // If enemy reaches the last path, ...
                 {
                     // Deactivate the object
+                    ReduceLives(1);
                     enemy.gameObject.SetActive(false);
                 }
             }
@@ -90,6 +111,14 @@ public class LevelManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Restart game when is over
+    /// </summary>
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     /// <summary>
     /// Show all towers in Tower UI
     /// </summary>
@@ -120,6 +149,24 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void SpawnEnemy()
     {
+        SetTotalEnemies(--enemyCounter);
+        
+        // If enemy counter is below 0, don't spawn anymore
+        if (enemyCounter < 0)
+        {
+            bool isAllEnemyDestroyed = spawnedEnemies.Find(
+                e => e.gameObject.activeSelf) == null;
+
+            // If all enemies are destroyed, ...
+            if (isAllEnemyDestroyed)
+            {
+                // Player is win
+                SetGameOver(true);
+            }
+            
+            return;
+        }
+        
         // Choose random enemy
         int randomIndex = Random.Range(0, enemyPrefabs.Length);
         string enemyIndexString = (randomIndex + 1).ToString();
@@ -197,6 +244,48 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ReduceLives(int lives)
+    {
+        SetCurrentLives(currentLives - lives);
+
+        if (currentLives <= 0)
+        {
+            SetGameOver(false);
+        }
+    }
+    
+    /// <summary>
+    /// Set player's current lives
+    /// </summary>
+    /// <param name="currentLives">Player's current lives</param>
+    private void SetCurrentLives(int currentLives)
+    {
+        this.currentLives = Mathf.Max(currentLives, 0);
+        livesInfo.text = $"Lives: {this.currentLives}";
+    }
+    
+    /// <summary>
+    /// Set total current enemies
+    /// </summary>
+    /// <param name="totalEnemies"></param>
+    private void SetTotalEnemies(int totalEnemies)
+    {
+        enemyCounter = totalEnemies;
+        totalEnemiesInfo.text = $"Total Enemy: {Mathf.Max(enemyCounter, 0)}";
+    }
+    
+    /// <summary>
+    /// Set game over info
+    /// </summary>
+    /// <param name="isWin">Is player win the game?</param>
+    private void SetGameOver(bool isWin)
+    {
+        IsOver = true;
+
+        statusInfo.text = isWin ? "You Won!" : "You Lose!";
+        panel.gameObject.SetActive(true);
     }
 
     private void OnDrawGizmos()
