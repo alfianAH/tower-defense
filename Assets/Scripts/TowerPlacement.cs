@@ -20,7 +20,7 @@ public class TowerPlacement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (placedTower != null) return;
+        if (placedTower == null) return;
 
         placedTower.SetPlacePosition(null);
         placedTower = null;

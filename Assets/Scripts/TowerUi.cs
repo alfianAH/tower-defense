@@ -60,7 +60,7 @@ public class TowerUi : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         if (currentSpawnedTower.PlacePosition == null)
         {
             // Destroy the instantiated one
-            Destroy(currentSpawnedTower);
+            Destroy(currentSpawnedTower.gameObject);
         }
         else // Else, ...
         {
