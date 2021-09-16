@@ -94,14 +94,6 @@ public class LevelManager : SingletonBaseClass<LevelManager>
             }
         }
     }
-    
-    /// <summary>
-    /// Restart game when is over
-    /// </summary>
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
 
     /// <summary>
     /// Show all towers in Tower UI
