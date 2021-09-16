@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ButtonManager : SingletonBaseClass<ButtonManager>
 {
-    private bool isFaster = false;
+    private bool isFaster;
     
     /// <summary>
     /// Faster the game

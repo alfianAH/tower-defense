@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -221,10 +220,15 @@ public class LevelManager : SingletonBaseClass<LevelManager>
             }
         }
     }
-
+    
+    /// <summary>
+    /// Reduce lives if enemy reach the last path
+    /// </summary>
+    /// <param name="lives"></param>
     private void ReduceLives(int lives)
     {
         SetCurrentLives(currentLives - lives);
+        AudioPlayer.Instance.PlaySFX("error");
 
         if (currentLives <= 0)
         {
