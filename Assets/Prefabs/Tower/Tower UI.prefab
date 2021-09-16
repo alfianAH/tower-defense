@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc8f0acdeae5e445b45da06f167b1c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerIcon: {fileID: 0}
+  towerIcon: {fileID: 3550344082084086019}
   towerPrefab: {fileID: 1618769168108853807, guid: 1bd2d60627c62e84da41185ce2316c67,
     type: 3}
 --- !u!114 &8955524183139707689
