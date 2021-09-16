@@ -1,22 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioPlayer : MonoBehaviour
+public class AudioPlayer : SingletonBaseClass<AudioPlayer>
 {
-    // Singleton
-    private static AudioPlayer instance;
-
-    public static AudioPlayer Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = FindObjectOfType<AudioPlayer>();
-
-            return instance;
-        }
-    }
-
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private List<AudioClip> audioClips;
 

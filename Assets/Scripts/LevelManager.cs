@@ -4,24 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : SingletonBaseClass<LevelManager>
 {
-    // Singleton
-    private static LevelManager instance;
-
-    public static LevelManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<LevelManager>();
-            }
-
-            return instance;
-        }
-    }
-
     [Header("Level Properties")]
     [SerializeField] private int maxLives = 3;
     [SerializeField] private int totalEnemies = 15;
