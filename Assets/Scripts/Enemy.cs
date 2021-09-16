@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,8 +11,8 @@ public class Enemy : MonoBehaviour
     public int CurrentPathIndex { get; private set; }
 
     private int currentHealth;
-    private const string EnemyHitAudio = "hit-enemy",
-        EnemyDieAudio = "enemy-die";
+    private const string ENEMY_HIT_AUDIO = "hit-enemy",
+        ENEMY_DIE_AUDIO = "enemy-die";
 
     private void OnEnable()
     {
@@ -50,7 +49,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            transform.rotation = quaternion.Euler(distance.x > 0 
+            transform.rotation = Quaternion.Euler(distance.x > 0 
                 ? new Vector3(0f, 0f, 0f) // Rotate to the right (default)
                 : new Vector3(0f, 0f, 180f)); // Rotate to the left
         }
@@ -74,13 +73,13 @@ public class Enemy : MonoBehaviour
     public void ReduceEnemyHealth(int damage)
     {
         currentHealth -= damage;
-        AudioPlayer.Instance.PlaySFX(EnemyHitAudio);
+        AudioPlayer.Instance.PlaySFX(ENEMY_HIT_AUDIO);
         
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             gameObject.SetActive(false);
-            AudioPlayer.Instance.PlaySFX(EnemyDieAudio);
+            AudioPlayer.Instance.PlaySFX(ENEMY_DIE_AUDIO);
         }
 
         float healthPercentage = (float) currentHealth / maxHealth;
